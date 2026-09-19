@@ -4,46 +4,90 @@ Healthcare, laboratory tests, appointments and membership platform.
 
 ## Stack
 
-- Frontend: React + Vite + TypeScript + Tailwind + Redux Toolkit + TanStack Query
-- Backend: NestJS + Prisma + MySQL + JWT
+- Frontend: React + Vite + JavaScript + Tailwind + Redux Toolkit + TanStack Query
+- Backend: Node.js + Express (ESM, functional) + MySQL + JWT
+
+Folder layout mirrors the GetGRC project (`backend/` + `frontend/`).
+
+## Folder structure
+
+```
+HealthCare/
+  backend/
+    src/
+      app.js              # Express app
+      server.js           # process entry
+      config/             # env + database pool
+      constants/
+      controllers/        # reserved (GetGRC-aligned)
+      helper/
+      middleware/
+      routes/             # auth.js, users.js, …
+      services/
+      scripts/
+      utils/
+    sql/
+      tables/             # one .sql file per table
+      apply-schema.js
+      seed.js
+  frontend/
+    src/
+      api/                # axios client
+      assets/
+      components/
+      config/
+      constants/
+      hooks/
+      pages/              # route pages (was screens)
+      routes/             # guards / route helpers
+      store/
+        slices/
+      utils/
+      App.jsx
+      main.jsx
+```
 
 ## Run locally
 
 ### 1. Database
 
 ```bash
-cd Backend
+cd backend
 docker compose up -d
+# or use local XAMPP/MySQL
 ```
 
 ### 2. API
 
 ```bash
-cd Backend
+cd backend
 npm install
-npx prisma migrate dev --name init
-npm run prisma:seed
-npm run start:dev
+cp .env.example .env   # if needed
+npm run db:schema      # only for empty MySQL
+# optional: npm run db:seed   # demo users only — does NOT overwrite your catalog
+npm run dev
 ```
 
-API: http://localhost:5000/api  
-Swagger: http://localhost:5000/api/docs
+API: http://localhost:5000/api
 
 ### 3. Web app
 
 ```bash
-cd Frontend
+cd frontend
 npm install
+cp .env.example .env   # if needed
 npm run dev
 ```
 
-App: http://localhost:5173 (or the next free port Vite prints)
+App: http://localhost:5173
 
-MySQL is expected locally (XAMPP root with empty password is configured in `Backend/.env`). Docker Compose is also included if you prefer a container.
+Frontend env (`frontend/.env`):
+
+- `VITE_API_BASE_URL=/api` — axios base URL
+- `VITE_API_PROXY_TARGET=http://localhost:5000` — Vite proxy to Express
 
 ## Demo accounts
 
 - User: `mayur@healthcart.com` / `Demo@1234`
 - Admin: `admin@healthcart.com` / `Admin@1234`
-
-Open `/splash` for the branded intro, then sign in and complete the booking and membership journeys.
+- Super admin: `superadmin@healthidcard.com` / `Super@1234`
