@@ -1,0 +1,21 @@
+CREATE TABLE PaymentTransaction (
+  id VARCHAR(30) PRIMARY KEY,
+  appointmentId VARCHAR(30) NOT NULL,
+  userId VARCHAR(30) NOT NULL,
+  bookingCode VARCHAR(64) NOT NULL,
+  testName VARCHAR(255) NOT NULL,
+  invoiceNumber VARCHAR(64) NULL UNIQUE,
+  amount DECIMAL(10,2) NOT NULL,
+  currency VARCHAR(8) NOT NULL DEFAULT 'INR',
+  method ENUM('UPI','CARD','COD','WALLET') NOT NULL,
+  status ENUM('PENDING','PAID','FAILED','REFUNDED') NOT NULL,
+  breakdown JSON NOT NULL,
+  createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  updatedAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  INDEX (userId, createdAt),
+  INDEX (appointmentId),
+  INDEX (status, createdAt),
+  INDEX (bookingCode),
+  CONSTRAINT fk_pay_appt FOREIGN KEY (appointmentId) REFERENCES Appointment(id) ON DELETE CASCADE,
+  CONSTRAINT fk_pay_user FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

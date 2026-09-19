@@ -1,0 +1,11 @@
+CREATE TABLE MembershipUsage (
+  id VARCHAR(30) PRIMARY KEY,
+  membershipId VARCHAR(30) NOT NULL,
+  testId VARCHAR(30) NOT NULL,
+  appointmentId VARCHAR(30) NULL,
+  usedAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  note VARCHAR(255) NULL,
+  CONSTRAINT fk_mu_mem FOREIGN KEY (membershipId) REFERENCES Membership(id) ON DELETE CASCADE,
+  CONSTRAINT fk_mu_test FOREIGN KEY (testId) REFERENCES Test(id),
+  CONSTRAINT fk_mu_appt FOREIGN KEY (appointmentId) REFERENCES Appointment(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

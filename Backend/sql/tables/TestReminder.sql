@@ -1,0 +1,16 @@
+CREATE TABLE TestReminder (
+  id VARCHAR(30) PRIMARY KEY,
+  userId VARCHAR(30) NOT NULL,
+  testId VARCHAR(30) NULL,
+  appointmentId VARCHAR(30) NULL,
+  label VARCHAR(255) NOT NULL,
+  remindAt DATETIME(3) NOT NULL,
+  isActive TINYINT(1) NOT NULL DEFAULT 1,
+  notifiedAt DATETIME(3) NULL,
+  createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  INDEX (userId, isActive),
+  INDEX (remindAt),
+  CONSTRAINT fk_rem_user FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE,
+  CONSTRAINT fk_rem_test FOREIGN KEY (testId) REFERENCES Test(id),
+  CONSTRAINT fk_rem_appt FOREIGN KEY (appointmentId) REFERENCES Appointment(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

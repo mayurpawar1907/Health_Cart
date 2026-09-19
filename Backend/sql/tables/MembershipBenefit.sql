@@ -1,0 +1,11 @@
+CREATE TABLE MembershipBenefit (
+  id VARCHAR(30) PRIMARY KEY,
+  planId VARCHAR(30) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  testId VARCHAR(30) NULL,
+  freeTest TINYINT(1) NOT NULL DEFAULT 0,
+  INDEX (planId),
+  CONSTRAINT fk_benefit_plan FOREIGN KEY (planId) REFERENCES MembershipPlan(id) ON DELETE CASCADE,
+  CONSTRAINT fk_benefit_test FOREIGN KEY (testId) REFERENCES Test(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
