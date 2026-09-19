@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --color-ink: #0c1929;
+  --color-ink-soft: #5a6b7d;
+  --color-teal: #1a4d6d;
+  --color-teal-dark: #0f3349;
+  --color-teal-light: #e6f2f8;
+  --color-brand-red: #e03a28;
+  --color-brand-red-dark: #c42e1e;
+  --color-brand-red-light: #fff0ee;
+  --color-sand: #8b95a5;
+  --color-cream: #f6f9fc;
+  --color-surface: #ffffff;
+  --color-card: #ffffff;
+  --color-line: #e2eaf2;
+  --color-glass: rgba(255, 255, 255, 0.72);
+  --color-glow: #2dd4bf;
+  --color-accent-violet: #6366f1;
+  --color-danger: #e03a28;
+  --color-success: #059669;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-cream);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Calm app background — aligned with operations console */
+.app-mesh {
+  background-color: #f4f7fa;
+  background-image: radial-gradient(ellipse 70% 45% at 15% -5%, rgba(26, 77, 109, 0.07), transparent);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 4px 24px rgba(12, 25, 41, 0.04),
+    0 1px 2px rgba(12, 25, 41, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 51, 73, 0.85);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-premium {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fbfd 100%);
+  border: 1px solid rgba(226, 234, 242, 0.9);
+  box-shadow:
+    0 1px 2px rgba(12, 25, 41, 0.04),
+    0 8px 32px rgba(26, 77, 109, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-premium:hover {
+  box-shadow:
+    0 2px 4px rgba(12, 25, 41, 0.04),
+    0 12px 32px rgba(26, 77, 109, 0.08);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #1a4d6d 0%, #0f3349 50%, #e03a28 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #c5d4e0; border-radius: 99px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+@media print {
+  body { overflow: visible; background: white; }
+  aside, header, nav { display: none !important; }
+  main { overflow: visible !important; padding: 0 !important; }
+  [data-print-hide] { display: none !important; }
+}
