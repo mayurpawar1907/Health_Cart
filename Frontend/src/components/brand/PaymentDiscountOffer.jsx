@@ -53,7 +53,7 @@ export function PaymentDiscountStrip({ className }) {
     </div>);
 }
 /** Pill badge for cards, headers, checkout */
-export function PaymentDiscountBadge({ size = 'md', className, }) {
+export function PaymentDiscountBadge({ size = 'md', className, tone = 'brand' }) {
     const copy = usePaymentDiscountCopy();
     if (!copy.isPromoActive)
         return null;
@@ -62,7 +62,11 @@ export function PaymentDiscountBadge({ size = 'md', className, }) {
         md: 'px-2.5 py-1 text-[10px]',
         lg: 'px-4 py-2 text-xs',
     };
-    return (<span className={cn('inline-flex shrink-0 items-center gap-1 rounded-full bg-[#e03a28] font-bold uppercase tracking-wide text-white shadow-sm', sizes[size], className)} title={copy.long}>
+    const tones = {
+        brand: 'bg-[#e03a28]',
+        teal: 'bg-teal',
+    };
+    return (<span className={cn('inline-flex shrink-0 items-center gap-1 rounded-full font-bold uppercase tracking-wide text-white shadow-sm', tones[tone] ?? tones.brand, sizes[size], className)} title={copy.long}>
       <BadgePercent className={size === 'lg' ? 'h-4 w-4' : 'h-3 w-3'}/>
       {copy.pct}% on special price
     </span>);

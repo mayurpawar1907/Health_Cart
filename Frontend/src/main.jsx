@@ -5,7 +5,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from '@/store';
 import App from './App.jsx';
+import { applyAppFont } from '@/utils/app-font';
 import './index.css';
+
+applyAppFont();
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {

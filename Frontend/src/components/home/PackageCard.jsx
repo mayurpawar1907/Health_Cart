@@ -37,7 +37,7 @@ export function PackageCard({ pkg, accentIndex = 0, compact, showIncluded }) {
 
         <h3 className="mt-3 font-display text-lg leading-snug text-ink group-hover:text-teal">{pkg.name}</h3>
         <p className={cn('mt-1.5 text-xs leading-relaxed text-ink-soft', compact ? 'line-clamp-2' : 'line-clamp-3')}>
-          {staticPkg?.shortDescription ?? pkg.shortDescription}
+          {pkg.shortDescription}
         </p>
 
         <div className="mt-3 flex flex-wrap gap-2">

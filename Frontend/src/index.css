@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Roboto", sans-serif;
+  --font-display: "Roboto", sans-serif;
+  --font-mono: "Roboto", sans-serif;
   --color-ink: #0c1929;
   --color-ink-soft: #5a6b7d;
   --color-teal: #1a4d6d;
@@ -23,6 +24,10 @@
   --color-success: #059669;
 }
 
+html {
+  font-family: "Roboto", sans-serif;
+}
+
 html, body, #root {
   height: 100%;
   width: 100%;
@@ -30,16 +35,26 @@ html, body, #root {
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: inherit;
   color: var(--color-ink);
   background: var(--color-cream);
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, .font-display {
+#root,
+button,
+input,
+textarea,
+select,
+optgroup {
+  font-family: inherit;
+}
+
+h1, h2, h3, h4, h5, h6, .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 /* Calm app background — aligned with operations console */
@@ -120,6 +135,79 @@ h1, h2, h3, .font-display {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-thumb { background: #c5d4e0; border-radius: 99px; }
 ::-webkit-scrollbar-track { background: transparent; }
+
+/* Public landing page — scrollable document layout */
+.landing-page {
+  overflow-x: hidden;
+}
+
+.landing-page main {
+  overflow: visible;
+}
+
+.landing-container {
+  width: 100%;
+  max-width: 73rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 768px) {
+  .landing-container {
+    padding-inline: 1.5rem;
+  }
+}
+
+.landing-mega-menu nav button {
+  font-family: inherit;
+}
+
+.landing-mega-dropdown {
+  border-top: 1px solid rgba(12, 25, 41, 0.06);
+}
+
+@keyframes landing-mega-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.landing-mega-panel {
+  animation: landing-mega-enter 0.22s ease-out;
+}
+
+.landing-mega-backdrop {
+  animation: landing-mega-enter 0.18s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-mega-panel,
+  .landing-mega-backdrop {
+    animation: none;
+  }
+}
+
+.landing-hero input[type='search']::-webkit-search-cancel-button {
+  display: none;
+}
+
+.landing-stat-card {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.landing-stat-card:hover {
+  border-color: rgba(26, 77, 109, 0.25);
+  box-shadow: 0 4px 16px rgba(12, 25, 41, 0.06);
+}
+
+.landing-page section {
+  scroll-margin-top: 5rem;
+}
 
 @media print {
   body { overflow: visible; background: white; }

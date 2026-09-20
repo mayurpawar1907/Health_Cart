@@ -47,7 +47,7 @@ function CardFront({ data }) {
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
-            <img src="/brand/health-id-icon.png" alt="" className="h-10 w-10 shrink-0 rounded-lg bg-white/95 p-1 object-contain"/>
+            <img src="/brand/health-id-mark.svg" alt="" className="h-10 w-10 shrink-0 rounded-lg bg-white/95 p-1 object-contain"/>
             <div className="space-y-0.5">
               <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/80">HealthID Card</p>
               <p className="text-[10px] leading-none text-white/50">Family Health Membership</p>
