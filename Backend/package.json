@@ -8,6 +8,7 @@
     "start": "node src/server.js",
     "db:schema": "node sql/apply-schema.js",
     "db:seed": "node sql/seed.js",
+    "db:import-catalog": "node sql/import-catalog-from-docx.js",
     "db:setup": "npm run db:schema && npm run db:seed"
   },
   "dependencies": {

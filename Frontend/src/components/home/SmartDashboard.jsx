@@ -49,7 +49,7 @@ export function HomeExplore({ categories, popular }) {
           </div>
           <div className="-mx-1 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-3 scroll-smooth [scrollbar-width:thin]">
             {popular.filter((t) => !t.isPackage).slice(0, 8).map((t, i) => (<div key={t.id} className="snap-start">
-                <OfferCard test={t} badge="Popular" accentIndex={i}/>
+                <OfferCard test={t} badge="Popular"/>
               </div>))}
           </div>
         </section>) : null}

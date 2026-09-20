@@ -34,7 +34,7 @@ export function HomePackages() {
       </div>
       <div className="-mx-1 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-3 scroll-smooth [scrollbar-width:thin]">
         {list.map((pkg, i) => (<div key={pkg.id} className="snap-start">
-            <PackageCard pkg={pkg} accentIndex={i} compact showIncluded/>
+            <PackageCard pkg={pkg} compact showIncluded/>
           </div>))}
       </div>
     </section>);

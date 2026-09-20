@@ -6,7 +6,7 @@ import { cn } from '@/utils/utils'
 
 export function LandingMembership({ benefits }) {
   return (
-    <section id="membership" className="border-y border-line/60 bg-gradient-to-br from-ink via-teal-dark to-[#0a1628] py-14 text-white md:py-16">
+    <section id="membership" className="landing-reveal border-y border-white/5 bg-gradient-to-br from-[#0a2540] via-[#103554] to-[#061829] py-14 text-white shadow-xl md:py-16">
       <div className={cn(LANDING_CONTAINER, 'grid items-center gap-10 lg:grid-cols-2 lg:gap-14')}>
         <div className="text-center lg:text-left">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal-light">Free for 1 year</p>
@@ -31,8 +31,8 @@ export function LandingMembership({ benefits }) {
         </div>
 
         <div className="mx-auto w-full max-w-md lg:max-w-none">
-          <div className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur-sm md:p-8">
-            <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a3d56] to-teal p-6 shadow-2xl">
+          <div className="landing-hero-panel rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur-sm md:p-8">
+            <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a3d56] to-teal p-6 shadow-2xl transition-transform duration-300 hover:scale-[1.02]">
               <p className="text-[10px] uppercase tracking-[0.25em] text-white/50">HealthID Card</p>
               <p className="mt-8 font-display text-2xl">Your family</p>
               <p className="mt-1 text-sm text-white/60">Member rates · Home collection included</p>

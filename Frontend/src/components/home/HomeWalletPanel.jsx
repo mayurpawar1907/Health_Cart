@@ -17,9 +17,15 @@ export function HomeWalletPanel({ hasMembership }) {
         <Loading label="Loading wallet"/>
       </div>);
     }
-    const w = wallet.data;
-    if (!w)
-        return null;
+    const w = wallet.data ?? {
+        balance: 0,
+        referralBalance: 0,
+        totalSpendable: 0,
+        referralPerTest: 200,
+        referralTestsRemaining: 0,
+        referralCode: '--------',
+        rules: { JOINING_BONUS: 250, REFERRAL_BONUS: 1000, REFERRAL_PER_TEST: 200 },
+    };
     async function copyCode() {
         await navigator.clipboard.writeText(w.referralCode);
         setCopied(true);

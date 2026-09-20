@@ -71,14 +71,25 @@ export function PaymentDiscountBadge({ size = 'md', className, tone = 'brand' })
       {copy.pct}% on special price
     </span>);
 }
-/** On product cards under price */
-export function PaymentDiscountCardNote({ specialPrice }) {
+/** On product cards under price — use variant="inline" for clean catalog cards */
+export function PaymentDiscountCardNote({ specialPrice, variant = 'default' }) {
     const copy = usePaymentDiscountCopy();
     if (!copy.isPromoActive)
         return null;
     const after = specialPrice != null && specialPrice > 0
         ? Math.round(specialPrice * (1 - copy.pct / 100))
         : null;
+
+    if (variant === 'inline') {
+        if (after == null) return null;
+        return (
+            <p className="mt-2 text-[11px] leading-snug text-ink-soft">
+                Est. <span className="font-semibold text-teal-dark">{formatMoney(after)}</span> at checkout
+                <span className="text-ink-soft/80"> · extra {copy.pct}% off special price</span>
+            </p>
+        );
+    }
+
     return (<div className="mt-2 rounded-lg border border-[#e03a28]/20 bg-[#fff5f4] px-2.5 py-1.5">
       <div className="flex items-start gap-2">
         <BadgePercent className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#e03a28]"/>

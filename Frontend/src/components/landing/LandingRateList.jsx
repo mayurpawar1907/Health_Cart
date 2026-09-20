@@ -7,7 +7,7 @@ import { formatMoney } from '@/utils/utils'
 import { Button } from '@/components/ui/Button'
 import { PaymentDiscountBadge, usePaymentDiscountCopy } from '@/components/brand/PaymentDiscountOffer'
 import { Loading } from '@/components/ui/Loading'
-import { LANDING_CONTAINER } from '@/components/landing/landing-utils'
+import { LandingBlock, LandingSectionHeader } from '@/components/landing/LandingSection'
 import { cn } from '@/utils/utils'
 
 function savingsPercent(mrp, special) {
@@ -87,26 +87,27 @@ export function LandingRateList({
       : packagesQ.isLoading || categoriesQ.isLoading
 
   return (
-    <section id="catalog" className="border-t border-line/60 bg-cream/30 py-14 md:py-16">
-      <div className={LANDING_CONTAINER}>
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal">Full catalog</p>
-          <h2 className="mt-2 font-display text-3xl text-ink md:text-4xl">Search tests & packages</h2>
-          <p className="mt-3 text-ink-soft">
-            Official partner rates
-            {discount.isPromoActive ? (
-              <>
-                {' '}
-                with an extra <strong className="text-ink">{discount.pct}% off at payment</strong>
-              </>
-            ) : null}
-            . MRP is for reference — special price includes free home collection for members.
-          </p>
-          <PaymentDiscountBadge size="lg" tone="teal" className="mx-auto mt-4" />
-        </div>
+    <LandingBlock id="catalog" alt containerClassName="!py-0" className="!py-14 md:!py-16">
+        <LandingSectionHeader
+          eyebrow="Full catalog"
+          title="Search tests & packages"
+          subtitle={
+            <>
+              Official partner rates
+              {discount.isPromoActive ? (
+                <>
+                  {' '}
+                  with an extra <strong className="text-ink">{discount.pct}% off at payment</strong>
+                </>
+              ) : null}
+              . MRP is for reference — special price includes free home collection for members.
+            </>
+          }
+        />
+        <PaymentDiscountBadge size="lg" tone="teal" className="mt-4" />
 
-        <div className="mt-8 flex flex-col items-center gap-4 lg:flex-row lg:justify-center">
-          <div className="inline-flex rounded-xl border border-line/80 bg-white p-1">
+        <div className="mt-8 flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="inline-flex rounded-xl border border-line/80 bg-white p-1 shadow-sm">
             {[
               { id: 'tests', label: `Tests (${tests.length})` },
               { id: 'packages', label: `Packages (${packages.length})` },
@@ -132,22 +133,20 @@ export function LandingRateList({
               value={query}
               onChange={(e) => updateQuery(e.target.value)}
               placeholder={catalogTab === 'tests' ? 'Search tests…' : 'Search packages…'}
-              className="w-full rounded-xl border border-line bg-white py-2.5 pl-10 pr-4 text-sm outline-none ring-teal/30 focus:ring-2"
+              className="landing-search-bar w-full rounded-xl border border-line bg-slate-50 py-2.5 pl-10 pr-4 text-sm outline-none ring-teal/30 focus:border-teal focus:bg-white focus:ring-2"
             />
           </div>
         </div>
 
-        <div className="mt-4 flex justify-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mt-4 flex justify-start gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {categories.map((c) => (
             <button
               key={c}
               type="button"
               onClick={() => updateCategory(c)}
               className={cn(
-                'shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition',
-                category === c
-                  ? 'bg-teal text-white'
-                  : 'border border-line bg-white text-ink-soft hover:border-teal/40 hover:text-teal',
+                'landing-filter-pill shrink-0 px-3 py-1.5 text-xs',
+                category === c ? 'is-active' : 'text-ink-soft',
               )}
             >
               {c}
@@ -155,7 +154,7 @@ export function LandingRateList({
           ))}
         </div>
 
-        <div className="mt-6 overflow-hidden rounded-2xl border border-line bg-white shadow-sm">
+        <div className="landing-catalog-panel mt-6 overflow-hidden rounded-2xl border border-line/80 bg-white">
           {loading ? (
             <div className="p-10">
               <Loading label="Loading catalog…" />
@@ -252,7 +251,6 @@ export function LandingRateList({
             </>
           )}
         </div>
-      </div>
-    </section>
+    </LandingBlock>
   )
 }

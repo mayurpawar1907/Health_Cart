@@ -1,22 +1,25 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { LandingFooter, LandingHeader } from '@/components/landing/LandingLayout'
-import { LandingHero } from '@/components/landing/LandingHero'
 import { LandingServiceHub } from '@/components/landing/LandingServiceHub'
-import { LandingHowItWorks } from '@/components/landing/LandingHowItWorks'
-import { LandingFeatured } from '@/components/landing/LandingFeatured'
+import { LandingHero } from '@/components/landing/LandingHero'
+import { LandingDiscoverSection } from '@/components/landing/LandingDiscoverSection'
+import { LandingPackageShowcase } from '@/components/landing/LandingPackageShowcase'
+import { LandingHealthRisks } from '@/components/landing/LandingHealthRisks'
+import { LandingHealthHub } from '@/components/landing/LandingHealthHub'
+import { LandingWhyChoose } from '@/components/landing/LandingWhyChoose'
+import { LandingJourney } from '@/components/landing/LandingJourney'
 import { LandingMembership } from '@/components/landing/LandingMembership'
-import { LandingSocialProof } from '@/components/landing/LandingSocialProof'
 import { LandingRateList } from '@/components/landing/LandingRateList'
-import { LANDING_CONTAINER, readLandingCity, saveLandingCity } from '@/components/landing/landing-utils'
+import { LandingBlock, LandingSectionHeader } from '@/components/landing/LandingSection'
+import { readLandingCity, saveLandingCity, SERVICE_TAB_LABELS } from '@/components/landing/landing-utils'
 import { useCatalogStats } from '@/hooks/usePlatformPricing'
 import api, { unwrap } from '@/api/client'
 import { PaymentDiscountBadge } from '@/components/brand/PaymentDiscountOffer'
-import { cn } from '@/utils/utils'
 
 const PAGE_TITLE = 'HealthID Card — Home Lab Tests & Free Family Health Card'
 const PAGE_DESC =
@@ -35,6 +38,25 @@ export function LandingPage() {
     setCity(next)
     saveLandingCity(next)
   }
+
+  const scrollToCatalog = useCallback((opts = {}) => {
+    const { query = '', category = 'All', tab = 'packages' } = opts
+    if (query) setSearchQuery(query)
+    if (category) setRateCategory(category)
+    setServiceTab(tab === 'tests' ? 'blood-tests' : 'full-body-packages')
+    window.setTimeout(() => {
+      document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 50)
+  }, [])
+
+  const handleCategorySelect = useCallback(
+    (filterKey) => {
+      const label = SERVICE_TAB_LABELS[filterKey]
+      setServiceTab(filterKey)
+      scrollToCatalog({ category: label ?? 'All', tab: 'packages' })
+    },
+    [scrollToCatalog],
+  )
 
   const plansQ = useQuery({
     queryKey: ['landing-plans'],
@@ -96,30 +118,43 @@ export function LandingPage() {
   }, [])
 
   return (
-    <div className="landing-page min-h-screen bg-cream text-ink">
+    <div className="landing-page min-h-screen text-ink">
       <LandingHeader city={city} onCityChange={handleCityChange} />
 
       <main>
-        {/* Primary discovery — category mega menu */}
-        <LandingServiceHub city={city} activeTab={serviceTab} onTabChange={setServiceTab} />
+        <LandingServiceHub
+          city={city}
+          activeTab={serviceTab}
+          onTabChange={setServiceTab}
+          reportHours={stats.reportHours}
+          onBrowseCatalog={scrollToCatalog}
+        />
 
-        {/* Hero — value prop + search + conversion */}
         <LandingHero
           city={city}
           stats={stats}
-          onSearch={(q) => {
-            setSearchQuery(q)
-            setRateCategory('All')
-          }}
+          onSearch={(q) => scrollToCatalog({ query: q, category: 'All' })}
         />
 
-        {/* Reduce anxiety — show process early */}
-        <LandingHowItWorks />
+        <LandingDiscoverSection
+          city={city}
+          stats={stats}
+          onSelect={handleCategorySelect}
+          onBrowseCatalog={scrollToCatalog}
+        />
 
-        {/* Curated picks — packages & popular tests */}
-        <LandingFeatured />
+        <LandingPackageShowcase city={city} reportHours={stats.reportHours} />
 
-        {/* Single source of truth for pricing */}
+        <LandingHealthRisks city={city} onSelect={handleCategorySelect} />
+
+        <LandingHealthHub />
+
+        <LandingWhyChoose />
+
+        <LandingJourney reportHours={stats.reportHours} />
+
+        <div id="how-it-works" className="sr-only" aria-hidden />
+
         <LandingRateList
           externalQuery={searchQuery}
           externalCategory={rateCategory}
@@ -127,23 +162,19 @@ export function LandingPage() {
           onQueryChange={setSearchQuery}
         />
 
-        {/* Membership conversion */}
         <LandingMembership benefits={planBenefits} />
 
-        {/* Trust + social proof */}
-        <LandingSocialProof />
-
-        {/* FAQ */}
-        <section id="faq" className={cn(LANDING_CONTAINER, 'max-w-3xl py-14 md:py-16')}>
-          <h2 className="text-center font-display text-3xl text-ink">Common questions</h2>
-          <p className="mx-auto mt-2 max-w-lg text-center text-sm text-ink-soft">
-            Everything you need to know before booking your first home collection.
-          </p>
-          <div className="mt-10 divide-y divide-line rounded-2xl border border-line/80 bg-white shadow-sm">
+        <LandingBlock id="faq" containerClassName="max-w-3xl">
+          <LandingSectionHeader
+            center
+            title="Common questions"
+            subtitle="Everything you need to know before booking your first home collection."
+          />
+          <div className="landing-faq-panel mt-8 divide-y divide-line">
             {FAQ.map((f) => (
-              <details key={f.q} className="group px-5 py-4 sm:px-6 sm:py-5">
+              <details key={f.q} className="group px-5 py-4 sm:px-6">
                 <summary className="cursor-pointer list-none font-medium marker:content-none [&::-webkit-details-marker]:hidden">
-                  <span className="flex items-center justify-between gap-4">
+                  <span className="flex items-center justify-between gap-4 text-sm md:text-base">
                     {f.q}
                     <ChevronRight
                       className="h-5 w-5 shrink-0 text-teal transition group-open:rotate-90"
@@ -155,26 +186,24 @@ export function LandingPage() {
               </details>
             ))}
           </div>
-        </section>
+        </LandingBlock>
 
-        {/* Final CTA */}
-        <section className="border-t border-line/60 bg-gradient-to-r from-teal to-teal-dark px-4 py-14 text-center text-white md:px-6 md:py-16">
+        <section className="landing-cta-section landing-reveal border-t border-line/40 px-4 py-12 text-center text-white md:py-16">
           <PaymentDiscountBadge size="lg" className="mx-auto mb-4 !bg-white/15" />
-          <h2 className="font-display text-3xl md:text-4xl">Ready to book your first test?</h2>
-          <p className="mx-auto mt-3 max-w-lg text-white/80">
-            Free 1-year HealthID Card · Extra {stats.flatDiscount}% off at payment · {stats.testCount || '…'}+ tests ·
-            Home collection in {city}
+          <h2 className="font-display text-2xl md:text-3xl">Ready to book your first test?</h2>
+          <p className="mx-auto mt-3 max-w-lg text-sm text-white/80 md:text-base">
+            Free 1-year HealthID Card · Extra {stats.flatDiscount}% off at payment · Home collection in {city}
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <div className="mt-7 flex flex-wrap justify-center gap-3">
             <Link to="/signup">
-              <Button variant="primary" size="lg" className="rounded-xl px-10">
+              <Button variant="accent" size="lg" className="rounded-xl px-8">
                 Create free account
               </Button>
             </Link>
             <Link to="/login">
               <Button
                 size="lg"
-                className="rounded-xl border border-white/30 bg-transparent px-10 text-white hover:bg-white/10"
+                className="rounded-xl border border-white/30 bg-transparent px-8 text-white hover:bg-white/10"
               >
                 I have an account
               </Button>

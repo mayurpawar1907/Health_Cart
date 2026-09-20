@@ -116,13 +116,13 @@ export function TestsPage() {
         </div>
 
         {loading ? (<Loading label={packagesOnly ? 'Loading packages' : 'Loading tests'}/>) : list.length === 0 ? (<EmptyState title="No matches found" body="Try another category, clear your search, or browse all packages."/>) : packagesOnly ? (<div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {list.map((pkg, i) => (<PackageCard key={pkg.id} pkg={pkg} accentIndex={i} showIncluded/>))}
+            {list.map((pkg) => (<PackageCard key={pkg.id} pkg={pkg} showIncluded/>))}
           </div>) : view === 'popular' ? (<div className="-mx-1 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-3 scroll-smooth [scrollbar-width:thin] md:grid md:grid-cols-2 md:overflow-visible md:pb-0 xl:grid-cols-3">
-            {list.map((t, i) => (<div key={t.id} className="snap-start md:snap-align-none">
-                <OfferCard test={t} badge="Popular" accentIndex={i} fluid/>
+            {list.map((t) => (<div key={t.id} className="snap-start md:snap-align-none">
+                <OfferCard test={t} badge="Popular" fluid/>
               </div>))}
           </div>) : (<div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {list.map((t, i) => (<OfferCard key={t.id} test={t} accentIndex={i} fluid/>))}
+            {list.map((t) => (<OfferCard key={t.id} test={t} fluid/>))}
           </div>)}
       </section>
     </UserPage>);

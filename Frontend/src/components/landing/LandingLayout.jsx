@@ -26,7 +26,7 @@ export function LandingHeader({ city, onCityChange }) {
     <>
       <PaymentDiscountStrip />
 
-      <header className="sticky top-0 z-[60] border-b border-line/70 bg-white/95 backdrop-blur-md">
+      <header className="landing-header-pro sticky top-0 z-[60] border-b bg-white/98 backdrop-blur-md">
         <div className={cn(LANDING_CONTAINER, 'flex items-center justify-between gap-4 py-3')}>
           <div className="flex min-w-0 items-center gap-3 md:gap-5">
             <LandingLogo compact />
@@ -173,7 +173,7 @@ export function LandingHeader({ city, onCityChange }) {
 
 export function LandingFooter() {
   return (
-    <footer className="border-t border-white/10 bg-ink text-white">
+    <footer className="border-t border-white/10 bg-gradient-to-b from-[#0a2540] to-[#061829] text-white">
       <div className={cn(LANDING_CONTAINER, 'py-12 md:py-14')}>
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
           <div className="text-center lg:col-span-5 lg:text-left">

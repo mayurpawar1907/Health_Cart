@@ -6,6 +6,7 @@ import { resolveCheckoutPricing } from '@/utils/checkout-pricing';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { PaymentDiscountBadge } from '@/components/brand/PaymentDiscountOffer';
+import { CardPaymentForm } from '@/components/payments/CardPaymentForm';
 const UPI_APPS = [
     { id: 'gpay', name: 'Google Pay', short: 'GP' },
     { id: 'phonepe', name: 'PhonePe', short: 'Pe' },
@@ -29,6 +30,7 @@ function PriceLine({ label, value, tone = 'default', bold, strike, }) {
 export function BookPaymentPanel({ selected, quote, date, timeSlot, patientName, addressLine, paymentMethod, useWallet, useReferral, onUseWallet, onUseReferral, onPaymentMethod, onConfirm, isPending, error, }) {
     const [upiApp, setUpiApp] = useState(null);
     const [paidSimulated, setPaidSimulated] = useState(false);
+    const [cardReady, setCardReady] = useState(false);
     const pricing = resolveCheckoutPricing(quote);
     const amountDue = pricing.amountDue;
     const pct = pricing.paymentDiscountPercent;
@@ -42,7 +44,7 @@ export function BookPaymentPanel({ selected, quote, date, timeSlot, patientName,
     const canConfirm = amountDue === 0 ||
         paymentMethod === 'COD' ||
         (paymentMethod === 'UPI' && paidSimulated) ||
-        (paymentMethod === 'CARD' && paidSimulated);
+        (paymentMethod === 'CARD' && cardReady);
     return (<>
       <div className="rounded-2xl border border-line/80 bg-white/80 p-4">
         <p className="text-xs font-bold uppercase tracking-wider text-ink-soft">Booking summary</p>
@@ -164,7 +166,7 @@ export function BookPaymentPanel({ selected, quote, date, timeSlot, patientName,
           <div>
             <p className="mb-2 text-sm font-semibold">Pay final amount {formatMoney(amountDue)}</p>
             <div className="grid grid-cols-3 gap-2">
-              {['UPI', 'CARD', 'COD'].map((m) => (<button key={m} type="button" onClick={() => { onPaymentMethod(m); setPaidSimulated(false); setUpiApp(null); }} className={`flex flex-col items-center gap-1.5 rounded-xl border px-2 py-3 text-xs font-semibold transition ${paymentMethod === m
+              {['UPI', 'CARD', 'COD'].map((m) => (<button key={m} type="button" onClick={() => { onPaymentMethod(m); setPaidSimulated(false); setUpiApp(null); setCardReady(false); }} className={`flex flex-col items-center gap-1.5 rounded-xl border px-2 py-3 text-xs font-semibold transition ${paymentMethod === m
                     ? 'border-teal bg-teal-light text-teal shadow-sm'
                     : 'border-line bg-white text-ink-soft hover:border-teal/40'}`}>
                   {m === 'UPI' ? <Smartphone className="h-4 w-4"/> : m === 'CARD' ? <CreditCard className="h-4 w-4"/> : <Wallet className="h-4 w-4"/>}
@@ -194,11 +196,7 @@ export function BookPaymentPanel({ selected, quote, date, timeSlot, patientName,
               </div>
             </div>) : null}
 
-          {paymentMethod === 'CARD' ? (<div className="rounded-2xl border border-line/80 bg-white/80 p-4">
-              <Button variant="secondary" className="w-full rounded-xl" onClick={() => setPaidSimulated(true)}>
-                Simulate card payment · {formatMoney(amountDue)}
-              </Button>
-            </div>) : null}
+          {paymentMethod === 'CARD' ? (<CardPaymentForm amount={amountDue} onValidChange={setCardReady}/>) : null}
 
           {paymentMethod === 'COD' ? (<div className="rounded-2xl border border-teal/20 bg-teal-light/30 p-4 text-sm">
               Pay {formatMoney(amountDue)} to the phlebotomist at home collection (after {pct}% discount
