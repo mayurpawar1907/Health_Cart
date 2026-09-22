@@ -1,14 +1,14 @@
 import { createApp } from './app.js'
 import { config } from './config/index.js'
-import { getPool, queryOne } from './config/database.js'
+import { sequelize, queryOne } from './config/database.js'
 import { info, error } from './utils/logger.js'
 import { startReminderScheduler } from './services/reminders.service.js'
 
 const pingDatabase = async () => {
   try {
-    getPool()
+    await sequelize.authenticate()
     const row = await queryOne('SELECT 1 AS ok, DATABASE() AS db')
-    info(`MySQL connected → database=${row?.db ?? config.db.database}`)
+    info(`MySQL connected (Sequelize) → database=${row?.db ?? config.db.database}`)
     return true
   } catch (err) {
     error('MySQL connection failed:', err.message)

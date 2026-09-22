@@ -1,25 +1,19 @@
-import mysql from 'mysql2/promise'
-import { config } from './index.js'
+import { QueryTypes } from 'sequelize'
+import { sequelize } from '../orm/sequelize.js'
+import { models } from '../models/index.js'
 
-let pool = null
+export { sequelize, models }
 
+/** @deprecated use sequelize.authenticate() */
 export const getPool = () => {
-  if (!pool) {
-    pool = mysql.createPool({
-      ...config.db,
-      waitForConnections: true,
-      connectionLimit: 20,
-      namedPlaceholders: true,
-      dateStrings: false,
-      timezone: 'Z',
-    })
-  }
-  return pool
+  return sequelize.connectionManager.pool
 }
 
 export const query = async (sql, params) => {
-  const [rows] = await getPool().query(sql, params)
-  return rows
+  return sequelize.query(sql, {
+    replacements: params ?? {},
+    type: QueryTypes.SELECT,
+  })
 }
 
 export const queryOne = async (sql, params) => {
@@ -28,33 +22,30 @@ export const queryOne = async (sql, params) => {
 }
 
 export const execute = async (sql, params) => {
-  const [result] = await getPool().execute(sql, params)
-  return result
+  const [, metadata] = await sequelize.query(sql, {
+    replacements: params ?? {},
+  })
+  return metadata
 }
 
 export const withTransaction = async (fn) => {
-  const conn = await getPool().getConnection()
-  try {
-    await conn.beginTransaction()
-    const result = await fn(conn)
-    await conn.commit()
-    return result
-  } catch (err) {
-    await conn.rollback()
-    throw err
-  } finally {
-    conn.release()
-  }
+  return sequelize.transaction(async (transaction) => fn(transaction))
 }
 
-export const connQuery = async (conn, sql, params) => {
-  const [rows] = await conn.query(sql, params)
-  return rows
+export const connQuery = async (transaction, sql, params) => {
+  return sequelize.query(sql, {
+    replacements: params ?? {},
+    type: QueryTypes.SELECT,
+    transaction,
+  })
 }
 
-export const connExecute = async (conn, sql, params) => {
-  const [result] = await conn.execute(sql, params)
-  return result
+export const connExecute = async (transaction, sql, params) => {
+  const [, metadata] = await sequelize.query(sql, {
+    replacements: params ?? {},
+    transaction,
+  })
+  return metadata
 }
 
 export const bool = (v) => v === true || v === 1 || v === '1'
@@ -72,9 +63,5 @@ export const parseJson = (v, fallback) => {
 }
 
 export const closePool = async () => {
-  if (pool) {
-    await pool.end()
-    pool = null
-  }
+  await sequelize.close()
 }
-//test

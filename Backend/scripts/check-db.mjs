@@ -1,4 +1,4 @@
-import { query, closePool } from './src/config/database.js'
+import { query, closePool } from '../src/config/database.js'
 
 const tables = await query('SHOW TABLES')
 console.log('table count', tables.length)
